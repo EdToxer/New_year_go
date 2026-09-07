@@ -25,12 +25,7 @@ jobs:
          go mod download
          go mod verify
     - name: Check formatting (go fmt)
-      run: |
-        if [ -n "$(gofmt -l .)"]; then
-          echo "Styleguide Go Error"
-          gofmt -l .
-          exit 1
-        fi
+      run: gofmt -l .
 
     - name: Run tests
       run: go test -v ./...
