@@ -1,4 +1,4 @@
-name: Go Test
+name: Go Test and Pipeline
 
 on:
   push:
@@ -21,7 +21,20 @@ jobs:
         cache: true
 
     - name: Install dependencies
-      run: go mod download
+      run: |
+         go mod download
+         go mod verify
+    - name: Check formatting (go fmt)
+      run: |
+        if [ -n "$(gofmt -l .)"]; then
+          echo "Styleguide Go Error"
+          gofmt -l .
+          exit 1
+        fi
 
     - name: Run tests
       run: go test -v ./...
+
+    - name: Build main package
+      run: go build -v -o /dev/null .
+
